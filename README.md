@@ -3,7 +3,7 @@
 An end-to-end Machine Learning web application designed to estimate annual medical insurance charges with high precision. This project leverages a **Gradient Boosting Regressor** to analyze demographic and lifestyle factors, providing real-time cost analysis through an interactive UI.
 
 ## 🚀 Live Demo
-[🔗 View Live App](https://share.streamlit.io/HafsaIbrahim/YOUR_REPO_NAME/main/app.py) *(Replace with your actual link)*
+[🔗 View Live App](https://medicalinsurancecostprediction-bd4njuxhrkulsx56usw566.streamlit.app/) *(Replace with your actual link)*
 
 ## 🛠️ Tech Stack
 - **Engine:** Python 3.10+
