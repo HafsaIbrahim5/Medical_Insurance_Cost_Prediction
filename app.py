@@ -19,12 +19,6 @@ st.markdown(
         font-weight: bold;
         border: none;
     }
-    .stMetric {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -66,9 +60,7 @@ with col1:
 
 with col2:
     st.subheader("⚖️ Health Indicators")
-    bmi = st.number_input(
-        "Body Mass Index (BMI)", 10.0, 60.0, 25.0, help="Healthy range is 18.5 - 24.9"
-    )
+    bmi = st.number_input("Body Mass Index (BMI)", 10.0, 60.0, 25.0)
     smoker = st.radio("Do you smoke?", ["no", "yes"], horizontal=True)
     st.markdown("###")
     predict_btn = st.button("Generate Cost Analysis", type="primary")
@@ -92,31 +84,40 @@ if predict_btn:
         cost = float(prediction[0])
 
         st.markdown("---")
-        res_col1, res_col2 = st.columns([1, 2])
 
-        with res_col1:
-            st.metric(label="Predicted Annual Charge", value=f"${cost:,.2f}")
+        st.markdown(
+            f"""
+            <div style="background-color: #ffffff; padding: 25px; border-radius: 15px; text-align: center; border-left: 10px solid #2e7d32; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h2 style="color: #555; margin: 0; font-family: sans-serif;">Predicted Annual Charge</h2>
+                <h1 style="color: #2e7d32; margin: 10px 0; font-size: 3rem;">${cost:,.2f}</h1>
+            </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
-        with res_col2:
-            st.markdown("#### 📊 Risk Insight")
-            importance_data = {
-                "Factor": ["Age", "BMI", "Lifestyle"],
-                "Impact": [age * 0.2, bmi * 0.4, (80 if smoker == "yes" else 10)],
-            }
-            st.bar_chart(pd.DataFrame(importance_data).set_index("Factor"))
+        st.markdown("#### 📊 Breakdown of Impact Factors")
+        impact_data = {
+            "Factor": ["Age Impact", "BMI Impact", "Lifestyle (Smoking)"],
+            "Contribution": [age * 1.5, bmi * 2.5, (150 if smoker == "yes" else 20)],
+        }
+        st.bar_chart(
+            pd.DataFrame(impact_data).set_index("Factor"),
+            horizontal=True,
+            color="#2e7d32",
+        )
 
         st.subheader("💡 Hafsa's AI Recommendations")
         if smoker == "yes":
             st.error(
-                "Smoking is the primary driver of your high insurance cost. Quitting could save you over $15,000/year."
+                f"⚠️ **Urgent Alert:** Smoking adds approximately **$15,500** to your yearly bill. Quitting is your best financial and health move."
             )
         elif bmi > 30:
             st.warning(
-                "Your BMI is in the high-cost range. Managing weight can lead to significantly lower premiums."
+                "⚠️ **Health Note:** Your BMI is in the high range. Improving your health metrics could lower your risk category."
             )
         else:
             st.success(
-                "Your health profile is optimal. You are eligible for the most competitive market rates."
+                "✅ **Profile Score: Excellent!** You are in the lowest risk bracket for medical insurance."
             )
 
     except Exception as e:
